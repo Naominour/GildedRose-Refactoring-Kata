@@ -50,6 +50,16 @@ class Updater(object):
         # Legendary item, no changes
         pass
 
+    def conjured(self, item):
+        # Conjured items degrade twice as fast as normal ones
+        if item.sell_in > 0:
+            change = -2
+        else:
+            change = -4
+        item.quality = max((item.quality + change), self.quality_min)
+        item.sell_in -= 1
+        
+
 
 class GildedRose(object):
 
@@ -67,6 +77,8 @@ class GildedRose(object):
                 updater.backstage_passes(item)
             elif item.name == 'Sulfuras, Hand of Ragnaros':
                 updater.sulfuras(item)
+            elif item.name.startswith('Conjured'):
+                updater.conjured(item)
             else:
                 updater.normal_item(item)
 
